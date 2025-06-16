@@ -1,0 +1,96 @@
+{
+  "name": "favorite-folders",
+  "displayName": "Favorite Folders",
+  "description": "A VS Code extension to favorite folders and view them in a custom panel.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.101.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "id": "favoriteFolderView",
+          "name": "Favorite Folder",
+          "icon": "$(star)"
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "Favorite Folder Configuration",
+      "properties": {}
+    },
+    "commands": [
+      {
+        "command": "favorite-folders.addFolder",
+        "title": "Add Favorite Folder",
+        "icon": "$(plus)"
+      },
+      {
+        "command": "favorite-folders.removeFolder",
+        "title": "Remove Favorite Folder",
+        "icon": "$(trashcan)"
+      },
+      {
+        "command": "favorite-folders.openFolder",
+        "title": "Open Folder",
+        "icon": "$(folder-open)"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "favorite-folders.addFolder",
+          "when": "explorerResourceIsFolder",
+          "group": "z_commands"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "favorite-folders.removeFolder",
+          "when": "view == favoriteFolderView && viewItem == favoriteFolder && viewItem != favoriteFolderChild",
+          "group": "inline"
+        },
+        {
+          "command": "favorite-folders.removeFolder",
+          "when": "view == favoriteFolderView && viewItem == favoriteFolder && viewItem != favoriteFolderChild",
+          "group": "navigation@10"
+        },
+        {
+          "command": "favorite-folders.openFolder",
+          "when": "view == favoriteFolderView && (viewItem == favoriteFolder || viewItem == favoriteFolderChild)",
+          "group": "navigation@10"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.101.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "eslint": "^9.25.1",
+    "typescript": "^5.8.3",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.5.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/your-repo.git"
+  }
+}
