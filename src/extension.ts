@@ -162,7 +162,18 @@ export function activate(context: vscode.ExtensionContext) {
 				}
 			}
 			if (folderUri) {
-				await vscode.commands.executeCommand('vscode.openFolder', folderUri, { forceNewWindow: true });
+				const workspaceFolders = vscode.workspace.workspaceFolders;
+				const isInWorkspace = workspaceFolders && workspaceFolders.some(f => {
+					// Deep search: check if folderUri is the workspace folder or a subfolder
+					const folderPath = f.uri.fsPath;
+					const targetPath = folderUri!.fsPath;
+					return targetPath === folderPath || targetPath.startsWith(folderPath + path.sep);
+				});
+				if (isInWorkspace) {
+					await vscode.commands.executeCommand('revealInExplorer', folderUri);
+				} else {
+					await vscode.commands.executeCommand('vscode.openFolder', folderUri, { forceNewWindow: true });
+				}
 			}
 		})
 	);

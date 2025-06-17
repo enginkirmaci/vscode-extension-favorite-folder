@@ -1,8 +1,9 @@
 {
-  "name": "favorite-folders",
-  "displayName": "Favorite Folders",
+  "name": "quick-folders",
+  "displayName": "Quick Folders",
   "description": "A VS Code extension to favorite folders and view them in a custom panel.",
   "version": "0.0.1",
+  "publisher": "enginkirmaci",
   "engines": {
     "vscode": "^1.101.0"
   },
@@ -17,7 +18,8 @@
         {
           "id": "favoriteFolderView",
           "name": "Favorite Folder",
-          "icon": "$(star)"
+          "icon": "$(star)",
+          "contextualTitle": "Favorite Folders"
         }
       ]
     },
@@ -91,6 +93,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/your-repo.git"
+    "url": "https://github.com/enginkirmaci/vscode-extension-favorite-folder.git"
   }
 }
