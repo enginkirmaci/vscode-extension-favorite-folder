@@ -1,34 +1,40 @@
-# Favorite Folders VS Code Extension
+# Quick Folders VS Code Extension 
 
-Favorite Folders is a Visual Studio Code extension that lets you quickly access your most-used folders from a custom panel in the Explorer sidebar.
+## Overview
+
+This extension helps you manage and quickly access your favorite folders within Visual Studio Code. It is designed to improve your workflow by allowing you to bookmark directories you use most often, so you can open them with a single command or click.
 
 ## Features
 
-- Add any folder to your favorites list
-- Remove folders from your favorites
-- Click a favorite to open it in a new window
-- View your favorites in the **Favorite Folder** panel in the Explorer sidebar
+- **Add Favorite Folder:** Bookmark any folder for quick access.
+- **Remove Favorite Folder:** Easily remove folders from your favorites list.
+- **List Favorites:** View all your bookmarked folders in a convenient list.
+- **Quick Open:** Instantly open any favorite folder in the current or new VS Code window.
+- **Command Palette Integration:** All features are accessible via the Command Palette for fast, keyboard-driven workflows.
 
 ## Usage
 
-1. Open the command palette (`Ctrl+Shift+P`) and search for **Add Favorite Folder** to add a folder to your favorites.
-2. Use the **Remove Favorite Folder** context menu on a favorite in the panel to remove it.
-3. Access your favorite folders from the **Favorite Folder** panel in the Explorer sidebar (look for the star icon).
+1. Open the Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`).
+2. Search for commands like `Add Quick Folder`, `Remove Quick Folder`.
+3. Select a command and follow the prompts.
+
+## Why Use This Extension?
+
+- Save time navigating complex directory structures.
+- Keep your most-used folders at your fingertips.
+- Enhance productivity by reducing repetitive navigation tasks.
+
+## Requirements
+
+No special requirements. Works out of the box with Visual Studio Code.
 
 ## Extension Settings
 
-This extension does not add any custom settings.
-
-## Known Issues
-
-- Only absolute folder paths are supported.
-- Favorites are stored globally (not per VS Code workspace).
+This extension does not require any custom settings.
 
 ## Release Notes
 
-### 0.0.1
-
-- Initial release with add/remove/view favorite folders functionality.
+See `CHANGELOG.md` for details on updates and changes.
 
 ## Contributing
 
@@ -40,4 +46,4 @@ If you encounter any problems or have suggestions, please open an issue on the r
 
 ---
 
-**Enjoy using Favorite Folders!**
+**Enjoy a faster, more organized workflow with Quick Folders!**

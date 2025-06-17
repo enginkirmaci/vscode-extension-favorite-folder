@@ -20,7 +20,7 @@ class FavoriteFoldersProvider implements vscode.TreeDataProvider<FavoriteFolder 
 
 	async getChildren(element?: FavoriteFolder | vscode.TreeItem): Promise<(FavoriteFolder | vscode.TreeItem)[]> {
 		if (!element) {
-			const favorites = this.context.globalState.get<string[]>('favoriteFolders', []);
+			const favorites = this.context.globalState.get<string[]>('quickFolders', []);
 			return favorites.map(fav => {
 				const uri = vscode.Uri.parse(fav);
 				const item: FavoriteFolder = new vscode.TreeItem(uri.fsPath.split(/[\\/]/).pop() || uri.fsPath, vscode.TreeItemCollapsibleState.Collapsed) as FavoriteFolder;
@@ -79,7 +79,7 @@ class FavoriteFoldersDragAndDropController implements vscode.TreeDragAndDropCont
 		if (!uriList) return;
 		const value = uriList.value as string;
 		const uris = value.split(/\r?\n/).map(s => s.trim()).filter(Boolean).map(s => vscode.Uri.parse(s));
-		const favorites = this.context.globalState.get<string[]>('favoriteFolders', []);
+		const favorites = this.context.globalState.get<string[]>('quickFolders', []);
 		let updated = false;
 		for (const uri of uris) {
 			if (uri.scheme === 'file' && !favorites.includes(uri.toString())) {
@@ -88,7 +88,7 @@ class FavoriteFoldersDragAndDropController implements vscode.TreeDragAndDropCont
 			}
 		}
 		if (updated) {
-			await this.context.globalState.update('favoriteFolders', favorites);
+			await this.context.globalState.update('quickFolders', favorites);
 			this.provider.refresh();
 		}
 	}
@@ -101,7 +101,8 @@ export function activate(context: vscode.ExtensionContext) {
 	const dnd = new FavoriteFoldersDragAndDropController(context, provider);
 	vscode.window.createTreeView('favoriteFolderView', {
 		treeDataProvider: provider,
-		dragAndDropController: dnd
+		dragAndDropController: dnd,
+		showCollapseAll: true
 	});
 
 	context.subscriptions.push(
@@ -114,10 +115,10 @@ export function activate(context: vscode.ExtensionContext) {
 				}
 			}
 			if (folderUri) {
-				const favorites = context.globalState.get<string[]>('favoriteFolders', []);
+				const favorites = context.globalState.get<string[]>('quickFolders', []);
 				if (!favorites.includes(folderUri.toString())) {
 					favorites.push(folderUri.toString());
-					await context.globalState.update('favoriteFolders', favorites);
+					await context.globalState.update('quickFolders', favorites);
 					provider.refresh();
 				}
 			}
@@ -141,9 +142,9 @@ export function activate(context: vscode.ExtensionContext) {
 				}
 			}
 			if (folderUri) {
-				const favorites = context.globalState.get<string[]>('favoriteFolders', []);
+				const favorites = context.globalState.get<string[]>('quickFolders', []);
 				const updated = favorites.filter(fav => fav !== folderUri.toString());
-				await context.globalState.update('favoriteFolders', updated);
+				await context.globalState.update('quickFolders', updated);
 				provider.refresh();
 			}
 		})
@@ -174,6 +175,46 @@ export function activate(context: vscode.ExtensionContext) {
 				} else {
 					await vscode.commands.executeCommand('vscode.openFolder', folderUri, { forceNewWindow: true });
 				}
+			}
+		})
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('favorite-folders.refresh', () => {
+			provider.refresh();
+		})
+	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('favorite-folders.showContextMenu', async (itemOrUri?: FavoriteFolder | vscode.Uri) => {
+			let folderUri: vscode.Uri | undefined;
+			if (itemOrUri) {
+				if (itemOrUri instanceof vscode.Uri) {
+					folderUri = itemOrUri;
+				} else if ((itemOrUri as FavoriteFolder).uri) {
+					folderUri = (itemOrUri as FavoriteFolder).uri;
+				} else if ((itemOrUri as any).resourceUri) {
+					folderUri = (itemOrUri as any).resourceUri;
+				}
+			}
+			if (!folderUri) {
+				vscode.window.showWarningMessage('No folder selected.');
+				return;
+			}
+
+			let itemName = folderUri ? path.basename(folderUri.fsPath) : '';
+			let folderUriStr = folderUri.fsPath.toString();
+			if (folderUriStr.length > 50) {
+				folderUriStr = `${folderUriStr.substring(0, 25)}...${folderUriStr.substring(folderUriStr.length - 25)}`;
+			}
+
+			const actions = [
+				{ label: '$(folder-opened) Open Folder', action: 'favorite-folders.openFolder' },
+				{ label: '$(trashcan) Remove Folder', action: 'favorite-folders.removeFolder' }
+			];
+			const pick = await vscode.window.showQuickPick(actions, { placeHolder: `Select an action for ${itemName} (${folderUriStr})` });
+			if (pick) {
+				await vscode.commands.executeCommand(pick.action, folderUri);
 			}
 		})
 	);

@@ -1,9 +1,10 @@
-# Change Log
+## 0.0.2 | 2025/06/17
 
-All notable changes to the "favorite-folders" extension will be documented in this file.
+- Added drag-and-drop support to add quick folders directly from the Explorer.
+- Enhanced context menu actions for quick folders (open, remove).
+- UI/UX improvements for the Quick Folders view.
+- Updated documentation and changelog.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+## 0.0.1 | 2025/06/16
 
-## [Unreleased]
-
-- Initial release
+- Initial release with add/remove/view quick folders functionality.

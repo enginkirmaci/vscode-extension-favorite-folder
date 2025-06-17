@@ -1,9 +1,10 @@
 {
   "name": "quick-folders",
   "displayName": "Quick Folders",
-  "description": "A VS Code extension to favorite folders and view them in a custom panel.",
-  "version": "0.0.1",
+  "description": "A Visual Studio Code extension to manage and quickly access your favorite folders. This extension allows users to bookmark frequently used directories, providing easy navigation and quick opening of folders directly from the VS Code interface. Features include adding, removing, and listing favorite folders, as well as integration with the command palette for seamless workflow enhancement.",
+  "version": "0.0.3",
   "publisher": "enginkirmaci",
+  "icon": "images/logo.png",
   "engines": {
     "vscode": "^1.101.0"
   },
@@ -13,36 +14,54 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "favoriteFoldersContainer",
+          "icon": "$(star)"
+        }
+      ]
+    },
     "views": {
-      "explorer": [
+      "favoriteFoldersContainer": [
         {
           "id": "favoriteFolderView",
-          "name": "Favorite Folder",
-          "icon": "$(star)",
-          "contextualTitle": "Favorite Folders"
+          "name": "Quick Folders",
+          "icon": "$(star)"
         }
       ]
     },
     "configuration": {
       "type": "object",
-      "title": "Favorite Folder Configuration",
+      "title": "Quick Folders Configuration",
       "properties": {}
     },
     "commands": [
       {
         "command": "favorite-folders.addFolder",
-        "title": "Add Favorite Folder",
+        "title": "Add Quick Folder",
+        "shortTitle": "Add Folder",
         "icon": "$(plus)"
       },
       {
         "command": "favorite-folders.removeFolder",
-        "title": "Remove Favorite Folder",
+        "title": "Remove Quick Folder",
         "icon": "$(trashcan)"
       },
       {
         "command": "favorite-folders.openFolder",
-        "title": "Open Folder",
-        "icon": "$(folder-open)"
+        "title": "Open Quick Folder",
+        "icon": "$(folder-opened)"
+      },
+      {
+        "command": "favorite-folders.refresh",
+        "title": "Refresh Quick Folders",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "favorite-folders.showContextMenu",
+        "title": "More Actions",
+        "icon": "$(ellipsis)"
       }
     ],
     "menus": {
@@ -55,19 +74,31 @@
       ],
       "view/item/context": [
         {
-          "command": "favorite-folders.removeFolder",
-          "when": "view == favoriteFolderView && viewItem == favoriteFolder && viewItem != favoriteFolderChild",
+          "command": "favorite-folders.openFolder",
+          "when": "view == favoriteFolderView && (viewItem == favoriteFolder || viewItem == favoriteFolderChild)",
           "group": "inline"
         },
         {
           "command": "favorite-folders.removeFolder",
           "when": "view == favoriteFolderView && viewItem == favoriteFolder && viewItem != favoriteFolderChild",
-          "group": "navigation@10"
+          "group": "navigation@2"
         },
         {
           "command": "favorite-folders.openFolder",
           "when": "view == favoriteFolderView && (viewItem == favoriteFolder || viewItem == favoriteFolderChild)",
-          "group": "navigation@10"
+          "group": "navigation@1"
+        },
+        {
+          "command": "favorite-folders.showContextMenu",
+          "when": "view == favoriteFolderView && (viewItem == favoriteFolder || viewItem == favoriteFolderChild)",
+          "group": "inline@99"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "favorite-folders.refresh",
+          "when": "view == favoriteFolderView",
+          "group": "navigation@-1"
         }
       ]
     }
