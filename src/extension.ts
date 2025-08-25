@@ -21,9 +21,16 @@ class FavoriteFoldersProvider implements vscode.TreeDataProvider<FavoriteFolder 
 	async getChildren(element?: FavoriteFolder | vscode.TreeItem): Promise<(FavoriteFolder | vscode.TreeItem)[]> {
 		if (!element) {
 			const favorites = this.context.globalState.get<string[]>('quickFolders', []);
-			return favorites.map(fav => {
+			// Check if we should expand the first root folder
+			const expandFirstRoot = vscode.workspace.getConfiguration('quickFolders').get<boolean>('expandFirstRoot', true);
+
+			return favorites.map((fav, index) => {
 				const uri = vscode.Uri.parse(fav);
-				const item: FavoriteFolder = new vscode.TreeItem(uri.fsPath.split(/[\\/]/).pop() || uri.fsPath, vscode.TreeItemCollapsibleState.Collapsed) as FavoriteFolder;
+				// Set the first folder to Expanded if the setting is enabled, all others to Collapsed
+				const collapsibleState = (index === 0 && expandFirstRoot) ?
+					vscode.TreeItemCollapsibleState.Expanded :
+					vscode.TreeItemCollapsibleState.Collapsed;
+				const item: FavoriteFolder = new vscode.TreeItem(uri.fsPath.split(/[\\/]/).pop() || uri.fsPath, collapsibleState) as FavoriteFolder;
 				item.uri = uri;
 				item.resourceUri = uri;
 				item.contextValue = 'favoriteFolder';
@@ -104,6 +111,15 @@ export function activate(context: vscode.ExtensionContext) {
 		dragAndDropController: dnd,
 		showCollapseAll: true
 	});
+
+	// Register a configuration change listener to refresh the view when settings change
+	context.subscriptions.push(
+		vscode.workspace.onDidChangeConfiguration(e => {
+			if (e.affectsConfiguration('quickFolders.expandFirstRoot')) {
+				provider.refresh();
+			}
+		})
+	);
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('favorite-folders.addFolder', async (uri?: vscode.Uri) => {

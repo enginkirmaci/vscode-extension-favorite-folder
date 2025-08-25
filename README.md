@@ -30,7 +30,9 @@ No special requirements. Works out of the box with Visual Studio Code.
 
 ## Extension Settings
 
-This extension does not require any custom settings.
+This extension provides the following settings:
+
+* `quickFolders.expandFirstRoot`: Automatically expand the first root folder in the Quick Folders view (default: `true`)
 
 ## Release Notes
 

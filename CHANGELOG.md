@@ -1,3 +1,8 @@
+## 0.0.5 | 2025/08/25
+
+- Added the ability to automatically expand the first root folder by default.
+- Added a configuration setting `quickFolders.expandFirstRoot` to control this behavior.
+
 ## 0.0.2 | 2025/06/17
 
 - Added drag-and-drop support to add quick folders directly from the Explorer.
