@@ -2,7 +2,7 @@
   "name": "quick-folders",
   "displayName": "Quick Folders",
   "description": "A Visual Studio Code extension to manage and quickly access your favorite folders. This extension allows users to bookmark frequently used directories, providing easy navigation and quick opening of folders directly from the VS Code interface. Features include adding, removing, and listing favorite folders, as well as integration with the command palette for seamless workflow enhancement.",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "publisher": "enginkirmaci",
   "icon": "images/logo.png",
   "engines": {

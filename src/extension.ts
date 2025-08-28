@@ -27,7 +27,7 @@ class FavoriteFoldersProvider implements vscode.TreeDataProvider<FavoriteFolder 
 			return favorites.map((fav, index) => {
 				const uri = vscode.Uri.parse(fav);
 				// Set the first folder to Expanded if the setting is enabled, all others to Collapsed
-				const collapsibleState = (index === 0 && expandFirstRoot) ?
+				const collapsibleState = expandFirstRoot ?
 					vscode.TreeItemCollapsibleState.Expanded :
 					vscode.TreeItemCollapsibleState.Collapsed;
 				const item: FavoriteFolder = new vscode.TreeItem(uri.fsPath.split(/[\\/]/).pop() || uri.fsPath, collapsibleState) as FavoriteFolder;
